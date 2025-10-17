@@ -36,7 +36,25 @@ RSpec.describe "API::V1::Conversions", type: :request do
       include_examples "returns the expected result", "correct"
     end
 
-    context "when student answer is incorrect" do
+    context "when student answer is correct (volume)" do
+      let(:input_value) { 4 }
+      let(:source_unit) { "tbsp" }
+      let(:target_unit) { "cups" }
+      let(:student_answer) { 0.25 }
+
+      include_examples "returns the expected result", "correct"
+    end
+
+    context "when student answer is incorrect (temperature)" do
+      let(:input_value) { 489.76 }
+      let(:source_unit) { "in3" }
+      let(:target_unit) { "ft3" }
+      let(:student_answer) { 1 }
+
+      include_examples "returns the expected result", "incorrect"
+    end
+
+    context "when student answer is incorrect (volume)" do
       let(:input_value) { 317.33 }
       let(:source_unit) { "K" }
       let(:target_unit) { "F" }
@@ -45,11 +63,20 @@ RSpec.describe "API::V1::Conversions", type: :request do
       include_examples "returns the expected result", "incorrect"
     end
 
-    context "when units are incompatible" do
+    context "when units are incompatible (volume to temperature)" do
       let(:input_value) { 73.12 }
       let(:source_unit) { "gal" }
       let(:target_unit) { "C" }
       let(:student_answer) { 19.4 }
+
+      include_examples "returns the expected result", "invalid", "units_incompatible", :unprocessable_entity
+    end
+
+    context "when units are incompatible (temperature to volume)" do
+      let(:input_value) { 0.12 }
+      let(:source_unit) { "R" }
+      let(:target_unit) { "L" }
+      let(:student_answer) { 8942 }
 
       include_examples "returns the expected result", "invalid", "units_incompatible", :unprocessable_entity
     end
