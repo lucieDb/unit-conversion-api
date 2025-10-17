@@ -15,9 +15,9 @@ class ConversionService
   end
 
   def call
-    handle_invalid_input
+    handle_invalid_inputs
     correct_rounded, student_rounded = compute_rounded_values
-    verdict = (student_rounded == correct_rounded) ? RESULT_CORRECT : RESULT_INCORRECT
+    verdict = (student_rounded == correct_rounded) && numeric?(student_answer) ? RESULT_CORRECT : RESULT_INCORRECT
 
     build_answer(result: verdict, correct_answer: correct_rounded, student_answer: student_rounded)
   rescue ConversionError => e
@@ -26,10 +26,9 @@ class ConversionService
 
   private
 
-  def handle_invalid_input
+  def handle_invalid_inputs
     raise ConversionError.new(:input_value_not_numeric, { input_value: input_value }) unless numeric?(input_value)
     raise ConversionError.new(:units_incompatible, { source_unit: source_unit, target_unit: target_unit }) unless units_compatible?
-    raise ConversionError.new(:student_answer_not_numeric, { student_answer: student_answer }) unless numeric?(student_answer)
   end
 
   def numeric?(value)
