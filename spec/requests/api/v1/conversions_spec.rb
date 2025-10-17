@@ -18,9 +18,9 @@ RSpec.describe "API::V1::Conversions", type: :request do
 
   let(:json) { JSON.parse(api_response.body) }
 
-  shared_examples "returns the expected result" do |expected_result, expected_reason = nil|
-    it "returns #{expected_result}" do
-      expect(api_response).to have_http_status(:ok)
+  shared_examples "returns the expected result" do |expected_result, expected_reason = nil, expected_status = :ok|
+    it "returns #{expected_result} with proper HTTP status" do
+      expect(api_response).to have_http_status(expected_status)
       expect(json["result"]).to eq(expected_result)
       expect(json["reason"]).to eq(expected_reason) if expected_reason
     end
@@ -51,7 +51,7 @@ RSpec.describe "API::V1::Conversions", type: :request do
       let(:target_unit) { "C" }
       let(:student_answer) { 19.4 }
 
-      include_examples "returns the expected result", "invalid", "units_incompatible"
+      include_examples "returns the expected result", "invalid", "units_incompatible", :unprocessable_entity
     end
 
     context "when student answer is not numeric" do
