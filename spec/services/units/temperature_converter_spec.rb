@@ -8,6 +8,10 @@ RSpec.describe Units::TemperatureConverter do
       expect(converter.convert(0, "C", "K").round(2)).to eq(273.15)
     end
 
+    it "converts negative Celsius to Kelvin" do
+      expect(converter.convert(-12, "C", "K").round(2)).to eq(261.15)
+    end
+
     it "converts Celsius to Fahrenheit" do
       expect(converter.convert(37.5, "C", "F").round(2)).to eq(99.5)
     end
@@ -19,6 +23,11 @@ RSpec.describe Units::TemperatureConverter do
     it "converts Fahrenheit to Rankine" do
       result = converter.convert(84.2, "F", "R")
       expect(result.round(2)).to eq(543.87)
+    end
+
+    it "converts negative Fahrenheit to Rankine" do
+      result = converter.convert(-248.9, "F", "R")
+      expect(result.round(2)).to eq(210.77)
     end
 
     it "converts Fahrenheit to Kelvin" do
@@ -44,6 +53,11 @@ RSpec.describe Units::TemperatureConverter do
     it "converts Kelvin to Rankine" do
       result = converter.convert(248.99, "K", "R")
       expect(result.round(2)).to eq(448.18)
+    end
+
+    it "converts Kelvin to Rankine" do
+      result = converter.convert(-9, "K", "R")
+      expect(result.round(2)).to eq(-16.2)
     end
 
     it "raises error for unknown unit" do
