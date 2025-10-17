@@ -19,13 +19,13 @@ module Units
       "GAL" => 3.78541
     }
 
-    def convert(value, from, to)
-      from_u = normalize(from)
-      to_u = normalize(to)
-      raise ArgumentError, "Unknown volume unit" unless FACTORS_TO_LITER[from_u] && FACTORS_TO_LITER[to_u]
+    def convert(input_value, source_unit, target_unit)
+      from_unit = normalize(source_unit)
+      to_unit = normalize(target_unit)
+      raise ArgumentError, "Unknown volume unit" unless FACTORS_TO_LITER[from_unit] && FACTORS_TO_LITER[to_unit]
 
-      liters = value * FACTORS_TO_LITER[from_u]
-      liters / FACTORS_TO_LITER[to_u]
+      liters = input_value * FACTORS_TO_LITER[from_unit]
+      liters / FACTORS_TO_LITER[to_unit]
     end
 
     private
