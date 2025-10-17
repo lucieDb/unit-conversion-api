@@ -89,5 +89,14 @@ RSpec.describe "API::V1::Conversions", type: :request do
 
       include_examples "returns the expected result", "incorrect"
     end
+
+    context "when input_value is not a numeric" do
+      let(:input_value) { "test" }
+      let(:source_unit) { "R" }
+      let(:target_unit) { "L" }
+      let(:student_answer) { 8942 }
+
+      include_examples "returns the expected result", "invalid", "input_value_not_numeric", :unprocessable_entity
+    end
   end
 end
