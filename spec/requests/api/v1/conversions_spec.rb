@@ -1,102 +1,85 @@
 require 'rails_helper'
 
-RSpec.describe "API::V1::Conversions", type: :request do
+RSpec.describe "API::V1::Conversions (Batch)", type: :request do
   let(:headers) { { "CONTENT_TYPE" => "application/json" } }
-  let(:params) do
-    {
-      input_value: input_value,
-      source_unit: source_unit,
-      target_unit: target_unit,
-      student_answer: student_answer
-    }.to_json
-  end
 
   subject(:api_response) do
-    post "/api/v1/convert", params: params, headers: headers
+    post "/api/v1/convert_batch", params: params.to_json, headers: headers
     response
   end
 
   let(:json) { JSON.parse(api_response.body) }
+  let(:results) { json["results"] }
 
-  shared_examples "returns the expected result" do |expected_result, expected_reason = nil, expected_status = :ok|
-    it "returns #{expected_result} with proper HTTP status" do
-      expect(api_response).to have_http_status(expected_status)
-      expect(json["result"]).to eq(expected_result)
-      expect(json["reason"]).to eq(expected_reason) if expected_reason
+  # TODO : factory responses ??
+  describe "POST /api/v1/convert_batch" do
+    let(:params) do
+      {
+        responses: [
+          {
+            input_value: 84.2,
+            source_unit: "F",
+            target_unit: "R",
+            student_answer: 543.87
+          },
+          {
+            input_value: 317.33,
+            source_unit: "K",
+            target_unit: "F",
+            student_answer: 111.554
+          },
+          {
+            input_value: 73.12,
+            source_unit: "gal",
+            target_unit: "C",
+            student_answer: 19.4
+          },
+          {
+            input_value: "abc",
+            source_unit: "F",
+            target_unit: "C",
+            student_answer: 50
+          }
+        ]
+      }
+    end
+
+    it "returns HTTP 200" do
+      expect(api_response).to have_http_status(:ok)
+    end
+
+    it "returns one result per input" do
+      expect(results.size).to eq(4)
+    end
+
+    it "returns correct, incorrect, and invalid results properly" do
+      first = results[0]
+      expect(first["result"]).to eq("correct")
+      expect(first).to include("correct_answer", "student_answer")
+
+      second = results[1]
+      expect(second["result"]).to eq("incorrect")
+      expect(second).to include("correct_answer", "student_answer")
+
+      third = results[2]
+      expect(third["result"]).to eq("invalid")
+      expect(third["reason"]).to eq("units_incompatible")
+      expect(third["message"]).to eq("Source and target units are not compatible")
+
+      fourth = results[3]
+      expect(fourth["result"]).to eq("invalid")
+      expect(fourth["reason"]).to eq("input_value_not_numeric")
+      expect(fourth["message"]).to eq("Input value must be a valid number")
     end
   end
 
-  describe "POST /api/v1/convert" do
-    context "when student answer is correct (temperature)" do
-      let(:input_value) { 84.2 }
-      let(:source_unit) { "F" }
-      let(:target_unit) { "R" }
-      let(:student_answer) { 543.87 }
+  context "when one of the responses causes a crash" do
+    let(:params) { { responses: [ {} ] } }
 
-      include_examples "returns the expected result", "correct"
-    end
-
-    context "when student answer is correct (volume)" do
-      let(:input_value) { 4 }
-      let(:source_unit) { "tbsp" }
-      let(:target_unit) { "cups" }
-      let(:student_answer) { 0.25 }
-
-      include_examples "returns the expected result", "correct"
-    end
-
-    context "when student answer is incorrect (temperature)" do
-      let(:input_value) { 489.76 }
-      let(:source_unit) { "in3" }
-      let(:target_unit) { "ft3" }
-      let(:student_answer) { 1 }
-
-      include_examples "returns the expected result", "incorrect"
-    end
-
-    context "when student answer is incorrect (volume)" do
-      let(:input_value) { 317.33 }
-      let(:source_unit) { "K" }
-      let(:target_unit) { "F" }
-      let(:student_answer) { 111.554 }
-
-      include_examples "returns the expected result", "incorrect"
-    end
-
-    context "when units are incompatible (volume to temperature)" do
-      let(:input_value) { 73.12 }
-      let(:source_unit) { "gal" }
-      let(:target_unit) { "C" }
-      let(:student_answer) { 19.4 }
-
-      include_examples "returns the expected result", "invalid", "units_incompatible", :unprocessable_entity
-    end
-
-    context "when units are incompatible (temperature to volume)" do
-      let(:input_value) { 0.12 }
-      let(:source_unit) { "R" }
-      let(:target_unit) { "L" }
-      let(:student_answer) { 8942 }
-
-      include_examples "returns the expected result", "invalid", "units_incompatible", :unprocessable_entity
-    end
-
-    context "when student answer is not numeric" do
-      let(:input_value) { 6.5 }
-      let(:source_unit) { "F" }
-      let(:target_unit) { "R" }
-      let(:student_answer) { "cat" }
-
-      include_examples "returns the expected result", "incorrect"
-    end
-
-    context "when input_value is not a numeric" do
-      let(:input_value) { "test" }
-      let(:source_unit) { "R" }
-      let(:target_unit) { "L" }
-      let(:student_answer) { 8942 }
-
-      include_examples "returns the expected result", "invalid", "input_value_not_numeric", :unprocessable_entity
+    it "returns a 500 internal error" do
+      expect(api_response).to have_http_status(:internal_server_error)
+      parsed = JSON.parse(api_response.body)
+      expect(parsed["error"]).to eq("internal_error")
     end
   end
 end
