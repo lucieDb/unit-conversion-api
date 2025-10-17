@@ -5,15 +5,16 @@ module Api
       def create
         # ** => unpacks the hash in keywords arguments for the service
         result = ConversionService.new(**conversion_params).call
+        render json: result, status: :ok
 
-        case result[:result]
-        when "invalid"
-          render json: result, status: :unprocessable_entity
-        when "incorrect", "correct"
-          render json: result, status: :ok
-        else
-          render json: { error: "Unexpected result type" }, status: :internal_server_error
-        end
+      rescue ConversionError => e
+        message = ErrorMessages::CONVERSION[e.reason] || "Unknown conversion error"
+        render json: {
+          result: "invalid",
+          reason: e.reason,
+          message: message
+        }, status: :unprocessable_entity
+
       rescue StandardError => e
         Rails.logger.error("Conversion error: #{e.full_message}")
         render json: { error: "Internal server error", message: e.message }, status: :internal_server_error
