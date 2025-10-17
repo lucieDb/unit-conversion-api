@@ -13,11 +13,11 @@ module Units
       },
       volume: {
         # L => Liter
-        # cups => Cups
-        # gall => Gallon
         # tbsp => Tablespoon
         # in3 => Cubic-inch
+        # cups => Cups
         # ft3 => Cubic-foot
+        # gal => Gallon
         units: %w[L tbsp in3 cups ft3 gal],
         converter: -> { Units::VolumeConverter.new }
       }

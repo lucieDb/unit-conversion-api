@@ -1,6 +1,15 @@
 # Class : transform the value with the new unit
+# Pivot unit => unit reference : Liter. Any unit is converted to this unit,
+# then from this unit. Avoid multiplying calculations
+# L => Liter
+# TBSP => Tablespoon
+# IN3 => Cubic-inch
+# CUPS => Cups
+# FT3 => Cubic-foot
+# GAL => Gallon
 module Units
   class VolumeConverter
+    # Conversion factors to the base unit (1 unit = X liters)
     FACTORS_TO_LITER = {
       "L" => 1.0,
       "TBSP" => 0.0147868,
