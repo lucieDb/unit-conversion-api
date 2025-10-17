@@ -3,18 +3,16 @@ module Api
     class ConversionsController < ApplicationController
       # POST /api/v1/convert
       def create
-        conversion_service = ConversionService.new(
-          input_value: params[:input_value],
-          source_unit: params[:source_unit],
-          target_unit: params[:target_unit],
-          student_answer: params[:student_answer]
-        )
-
-        result = conversion_service.call
-
+        result = ConversionService.new(conversion_params).call
         render json: result, status: :ok
       rescue => e
         render json: { error: "internal_error", message: e.message }, status: :internal_server_error
+      end
+
+      private
+
+      def conversion_params
+        params.permit(:input_value, :source_unit, :target_unit, :student_answer).to_h
       end
     end
   end
