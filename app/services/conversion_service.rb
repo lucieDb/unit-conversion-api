@@ -3,6 +3,7 @@
 class ConversionService
   RESULT_CORRECT   = "correct".freeze
   RESULT_INCORRECT = "incorrect".freeze
+  RESULT_INVALID   = "invalid".freeze
 
   attr_reader :input_value, :source_unit, :target_unit, :student_answer
 
@@ -18,7 +19,9 @@ class ConversionService
     correct_rounded, student_rounded = compute_rounded_values
     verdict = (student_rounded == correct_rounded) ? RESULT_CORRECT : RESULT_INCORRECT
 
-    success(result: verdict, correct_answer: correct_rounded, student_answer: student_rounded)
+    build_answer(result: verdict, correct_answer: correct_rounded, student_answer: student_rounded)
+  rescue ConversionError => e
+    invalid(reason: e.reason, details: e.details)
   end
 
   private
@@ -56,11 +59,21 @@ class ConversionService
     }
   end
 
-  def success(result:, correct_answer:, student_answer:)
+  def build_answer(result:, correct_answer:, student_answer:)
     base_payload.merge(
       correct_answer: correct_answer,
       student_answer: student_answer,
       result: result
+    )
+  end
+
+  def invalid(reason:, details: {})
+    base_payload.merge(
+      student_answer: student_answer,
+      result: RESULT_INVALID,
+      reason: reason,
+      message: ErrorMessages::CONVERSION[reason],
+      details: details
     )
   end
 end
