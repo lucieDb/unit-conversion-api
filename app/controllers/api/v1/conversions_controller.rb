@@ -3,16 +3,28 @@ module Api
     class ConversionsController < ApplicationController
       # POST /api/v1/convert
       def create
-        result = ConversionService.new(conversion_params).call
-        render json: result, status: :ok
-      rescue => e
-        render json: { error: "internal_error", message: e.message }, status: :internal_server_error
+        # ** => unpacks the hash in keywords arguments for the service
+        result = ConversionService.new(**conversion_params).call
+
+        case result[:result]
+        when "invalid"
+          render json: result, status: :unprocessable_entity
+        when "incorrect", "correct"
+          render json: result, status: :ok
+        else
+          render json: { error: "Unexpected result type" }, status: :internal_server_error
+        end
+      rescue StandardError => e
+        Rails.logger.error("Conversion error: #{e.full_message}")
+        render json: { error: "Internal server error", message: e.message }, status: :internal_server_error
       end
 
       private
 
       def conversion_params
-        params.permit(:input_value, :source_unit, :target_unit, :student_answer).to_h
+        params.permit(:input_value, :source_unit, :target_unit, :student_answer)
+              .to_h
+              .symbolize_keys
       end
     end
   end
