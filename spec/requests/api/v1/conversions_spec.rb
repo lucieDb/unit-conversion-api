@@ -2,57 +2,65 @@ require 'rails_helper'
 
 RSpec.describe "API::V1::Conversions", type: :request do
   let(:headers) { { "CONTENT_TYPE" => "application/json" } }
+  let(:params) do
+    {
+      input_value: input_value,
+      source_unit: source_unit,
+      target_unit: target_unit,
+      student_answer: student_answer
+    }.to_json
+  end
+
+  subject(:api_response) do
+    post "/api/v1/convert", params: params, headers: headers
+    response
+  end
+
+  let(:json) { JSON.parse(api_response.body) }
+
+  shared_examples "returns the expected result" do |expected_result, expected_reason = nil|
+    it "returns #{expected_result}" do
+      expect(api_response).to have_http_status(:ok)
+      expect(json["result"]).to eq(expected_result)
+      expect(json["reason"]).to eq(expected_reason) if expected_reason
+    end
+  end
 
   describe "POST /api/v1/convert" do
-    it "returns correct when student answer matches expected result" do
-      post "/api/v1/convert", params: {
-        input_value: 84.2,
-        source_unit: "F",
-        target_unit: "R",
-        student_answer: 543.87
-      }.to_json, headers: headers
+    context "when student answer is correct (temperature)" do
+      let(:input_value) { 84.2 }
+      let(:source_unit) { "F" }
+      let(:target_unit) { "R" }
+      let(:student_answer) { 543.87 }
 
-      expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
-      expect(body["result"]).to eq("correct")
+      include_examples "returns the expected result", "correct"
     end
 
-    it "returns incorrect when answer does not match" do
-      post "/api/v1/convert", params: {
-        input_value: 317.33,
-        source_unit: "K",
-        target_unit: "F",
-        student_answer: 111.554
-      }.to_json, headers: headers
+    context "when student answer is incorrect" do
+      let(:input_value) { 317.33 }
+      let(:source_unit) { "K" }
+      let(:target_unit) { "F" }
+      let(:student_answer) { 111.554 }
 
-      body = JSON.parse(response.body)
-      expect(body["result"]).to eq("incorrect")
+      include_examples "returns the expected result", "incorrect"
     end
 
-    it "returns invalid when units are incompatible" do
-      post "/api/v1/convert", params: {
-        input_value: 73.12,
-        source_unit: "gal",
-        target_unit: "C",
-        student_answer: 19.4
-      }.to_json, headers: headers
+    context "when units are incompatible" do
+      let(:input_value) { 73.12 }
+      let(:source_unit) { "gal" }
+      let(:target_unit) { "C" }
+      let(:student_answer) { 19.4 }
 
-      expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
-      expect(body["result"]).to eq("invalid")
-      expect(body["reason"]).to eq("units_incompatible")
+      include_examples "returns the expected result", "invalid", "units_incompatible"
     end
 
-    it "returns incorrect when student answer is not numeric" do
-      post "/api/v1/convert", params: {
-        input_value: 6.5,
-        source_unit: "F",
-        target_unit: "R",
-        student_answer: "cat"
-      }.to_json, headers: headers
+    context "when student answer is not numeric" do
+      let(:input_value) { 6.5 }
+      let(:source_unit) { "F" }
+      let(:target_unit) { "R" }
+      let(:student_answer) { "cat" }
 
-      body = JSON.parse(response.body)
-      expect(body["result"]).to eq("incorrect")
+      include_examples "returns the expected result", "incorrect"
     end
   end
 end
