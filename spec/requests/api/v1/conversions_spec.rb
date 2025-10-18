@@ -11,35 +11,15 @@ RSpec.describe "API::V1::Conversions (Batch)", type: :request do
   let(:json) { JSON.parse(api_response.body) }
   let(:results) { json["results"] }
 
-  # TODO : factory responses ??
   describe "POST /api/v1/convert_batch" do
     let(:params) do
       {
         responses: [
-          {
-            input_value: 84.2,
-            source_unit: "FAHRENHEIT",
-            target_unit: "Rankine",
-            student_answer: 543.87
-          },
-          {
-            input_value: 317.33,
-            source_unit: "KelviN",
-            target_unit: "FAHRENHEIT",
-            student_answer: 111.554
-          },
-          {
-            input_value: 73.12,
-            source_unit: "gallons",
-            target_unit: "CELSIUS",
-            student_answer: 19.4
-          },
-          {
-            input_value: "abc",
-            source_unit: "FAHRENHEIT",
-            target_unit: "Celsius",
-            student_answer: 50
-          }
+          FactoryBot.build(:conversion),
+          FactoryBot.build(:conversion, input_value: 317.33, source_unit: "KelviN", target_unit: "FAHRENHEIT", student_answer: 111.554),
+          FactoryBot.build(:conversion, :units_incompatible, input_value: 73.12, student_answer: 19.4),
+          FactoryBot.build(:conversion, :invalid_input),
+          FactoryBot.build(:conversion, :incorrect_answer)
         ]
       }
     end
@@ -49,27 +29,33 @@ RSpec.describe "API::V1::Conversions (Batch)", type: :request do
     end
 
     it "returns one result per input" do
-      expect(results.size).to eq(4)
+      expect(results.size).to eq(5)
     end
 
     it "returns correct, incorrect, and invalid results properly" do
       first = results[0]
       expect(first["result"]).to eq("correct")
-      expect(first).to include("correct_answer", "student_answer")
+      expect(first).to include("correct_answer", "student_answer", "input_value", "source_unit", "target_unit", "result")
 
       second = results[1]
       expect(second["result"]).to eq("incorrect")
-      expect(second).to include("correct_answer", "student_answer")
+      expect(second).to include("correct_answer", "student_answer", "input_value", "source_unit", "target_unit", "result")
 
       third = results[2]
+      expect(third).to include("details", "input_value", "source_unit", "target_unit", "student_answer", "result", "message", "reason")
       expect(third["result"]).to eq("invalid")
       expect(third["reason"]).to eq("units_incompatible")
       expect(third["message"]).to eq("Source and target units are not compatible")
 
       fourth = results[3]
+      expect(fourth).to include("details", "input_value", "source_unit", "target_unit", "student_answer", "result", "message", "reason")
       expect(fourth["result"]).to eq("invalid")
       expect(fourth["reason"]).to eq("input_value_not_numeric")
       expect(fourth["message"]).to eq("Input value must be a valid number")
+
+      fiveth = results[4]
+      expect(fiveth["result"]).to eq("incorrect")
+      expect(fiveth).to include("correct_answer", "student_answer", "input_value", "source_unit", "target_unit", "result")
     end
   end
 
