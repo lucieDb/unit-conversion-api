@@ -3,9 +3,9 @@ module Api
     class ConversionsController < ApplicationController
       # in : {
       #   "responses": [
-      #     { "input_value": 84.2, "source_unit": "F", "target_unit": "R", "student_answer": 543.87 },
-      #     { "input_value": 317.33, "source_unit": "K", "target_unit": "F", "student_answer": 111.554 },
-      #     { "input_value": 73.12, "source_unit": "gal", "target_unit": "C", "student_answer": 19.4 }
+      #     { "input_value": 84.2, "source_unit": "Fahrenheit", "target_unit": "Rankine", "student_answer": 543.87 },
+      #     { "input_value": 317.33, "source_unit": "Kelvin", "target_unit": "Fahrenheit", "student_answer": 111.554 },
+      #     { "input_value": 73.12, "source_unit": "Gallon", "target_unit": "Celsius", "student_answer": 19.4 }
       #   ]
       # }
       # out :
@@ -13,24 +13,24 @@ module Api
       #   "results": [
       #     {
       #       "input_value": 84.2,
-      #       "source_unit": "F",
-      #       "target_unit": "R",
+      #       "source_unit": "Fahrenheit",
+      #       "target_unit": "Rankine",
       #       "student_answer": 543.87,
       #       "correct_answer": 543.87,
       #       "result": "correct"
       #     },
       #     {
       #       "input_value": 317.33,
-      #       "source_unit": "K",
-      #       "target_unit": "F",
+      #       "source_unit": "Kelvin",
+      #       "target_unit": "Fahrenheit",
       #       "student_answer": 111.554,
       #       "correct_answer": 111.55,
       #       "result": "incorrect"
       #     },
       #     {
       #       "input_value": 73.12,
-      #       "source_unit": "gal",
-      #       "target_unit": "C",
+      #       "source_unit": "Gallon",
+      #       "target_unit": "Celsius",
       #       "student_answer": 19.4,
       #       "result": "invalid",
       #       "reason": "units_incompatible",
