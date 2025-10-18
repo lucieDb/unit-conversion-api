@@ -8,12 +8,12 @@ module Units
 
       # Conversion factors to the base unit (1 unit = X liters)
       FACTORS_TO_LITER = {
-        "LITER" => 1.0,
-        "TABLESPOONE" => 0.0147868,
-        "CUBIC-INCH" => 0.0163871,
+        "LITERS" => 1.0,
+        "TABLESPOONS" => 0.0147868,
+        "CUBIC-INCHES" => 0.0163871,
         "CUPS" => 0.236588,
-        "CUBIC-FOOT" => 28.3168,
-        "GALLON" => 3.78541
+        "CUBIC-FEET" => 28.3168,
+        "GALLONS" => 3.78541
       }
 
       def convert(input_value, source_unit, target_unit)

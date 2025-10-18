@@ -6,7 +6,7 @@ module Units
         converter: -> { Units::Converters::TemperatureConverter.new }
       },
       volume: {
-        units: %w[LITER TABLESPOON CUBIC-INCH CUPS CUBIC-FOOT GALLON],
+        units: %w[LITERS TABLESPOONS CUBIC-INCHES CUPS CUBIC-FEET GALLONS],
         converter: -> { Units::Converters::VolumeConverter.new }
       }
     }.freeze

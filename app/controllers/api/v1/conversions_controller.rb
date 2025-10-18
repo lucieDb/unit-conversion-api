@@ -5,7 +5,7 @@ module Api
       #   "responses": [
       #     { "input_value": 84.2, "source_unit": "Fahrenheit", "target_unit": "Rankine", "student_answer": 543.87 },
       #     { "input_value": 317.33, "source_unit": "Kelvin", "target_unit": "Fahrenheit", "student_answer": 111.554 },
-      #     { "input_value": 73.12, "source_unit": "Gallon", "target_unit": "Celsius", "student_answer": 19.4 }
+      #     { "input_value": 73.12, "source_unit": "Gallons", "target_unit": "Celsius", "student_answer": 19.4 }
       #   ]
       # }
       # out :
@@ -29,7 +29,7 @@ module Api
       #     },
       #     {
       #       "input_value": 73.12,
-      #       "source_unit": "Gallon",
+      #       "source_unit": "Gallons",
       #       "target_unit": "Celsius",
       #       "student_answer": 19.4,
       #       "result": "invalid",
