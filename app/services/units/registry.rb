@@ -1,24 +1,16 @@
 # Class : give information about units
 module Units
   class Registry
+    extend NormalizationHelper
+
     # TODO : refacto CATEGORIES in another file ?
     CATEGORIES = {
       temperature: {
-        # K => Kelvin
-        # C => Celsius
-        # F => Fahrenheit
-        # R => Rankine
-        units: %w[K C F R],
+        units: %w[KELVIN CELSIUS FAHRENHEIT RANKINE],
         converter: -> { Units::TemperatureConverter.new }
       },
       volume: {
-        # L => Liter
-        # tbsp => Tablespoon
-        # in3 => Cubic-inch
-        # cups => Cups
-        # ft3 => Cubic-foot
-        # gal => Gallon
-        units: %w[L tbsp in3 cups ft3 gal],
+        units: %w[LITER TABLESPOON CUBIC-INCH CUPS CUBIC-FOOT GALLON],
         converter: -> { Units::VolumeConverter.new }
       }
     }
@@ -30,18 +22,11 @@ module Units
 
     # Return the category name of the unit
     def self.category_of(unit)
-      CATEGORIES.find { |_, data| data[:units].include?(unit) }&.first
+      CATEGORIES.find { |_, data| data[:units].include?(normalize(unit)) }&.first
     end
 
     def self.converter_for(category)
       CATEGORIES[category][:converter].call
     end
-
-    # TODO : more search
-    # Standardization of the input unit
-    # e.g:normalize(" GAL ") => "gal"
-    # def self.normalize(unit)
-    #   unit.to_s.strip[0].upcase == "K" ? "K" : unit.to_s.strip.downcase.gsub(/\s+/, "").sub(/^°/, "")
-    # end
   end
 end
