@@ -47,6 +47,7 @@ module Api
           ConversionService.new(**extract_conversion_params(response)).call
         end
 
+        binding.pry
         render json: { results: results }, status: :ok
       rescue StandardError => e
         Rails.logger.error("Batch conversion error: #{e.full_message}")
