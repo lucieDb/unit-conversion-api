@@ -18,26 +18,26 @@ RSpec.describe "API::V1::Conversions (Batch)", type: :request do
         responses: [
           {
             input_value: 84.2,
-            source_unit: "F",
-            target_unit: "R",
+            source_unit: "FAHRENHEIT",
+            target_unit: "Rankine",
             student_answer: 543.87
           },
           {
             input_value: 317.33,
-            source_unit: "K",
-            target_unit: "F",
+            source_unit: "KelviN",
+            target_unit: "FAHRENHEIT",
             student_answer: 111.554
           },
           {
             input_value: 73.12,
-            source_unit: "gal",
-            target_unit: "C",
+            source_unit: "gallons",
+            target_unit: "CELSIUS",
             student_answer: 19.4
           },
           {
             input_value: "abc",
-            source_unit: "F",
-            target_unit: "C",
+            source_unit: "FAHRENHEIT",
+            target_unit: "Celsius",
             student_answer: 50
           }
         ]

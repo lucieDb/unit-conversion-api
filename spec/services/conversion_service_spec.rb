@@ -20,8 +20,8 @@ RSpec.describe ConversionService do
     context "when student answer matches the correct conversion" do
       context "for temperature units" do
         let(:input_value) { "84.2" }
-        let(:source_unit) { "F" }
-        let(:target_unit) { "R" }
+        let(:source_unit) { "Fahrenheit" }
+        let(:target_unit) { "RANKINE" }
         let(:student_answer) { "543.87" }
 
         include_examples "a conversion verdict", "correct"
@@ -30,7 +30,7 @@ RSpec.describe ConversionService do
       context "for volume units" do
         let(:input_value) { "25.6" }
         let(:source_unit) { "cups" }
-        let(:target_unit) { "L" }
+        let(:target_unit) { "Liters" }
         let(:student_answer) { "6.059" }
 
         include_examples "a conversion verdict", "correct"
@@ -39,8 +39,8 @@ RSpec.describe ConversionService do
 
     context "when student answer is numerically wrong" do
       let(:input_value) { "317.33" }
-      let(:source_unit) { "K" }
-      let(:target_unit) { "F" }
+      let(:source_unit) { "KELVIN" }
+      let(:target_unit) { "Fahrenheit" }
       let(:student_answer) { "111.554" }
 
       include_examples "a conversion verdict", "incorrect"
@@ -48,7 +48,7 @@ RSpec.describe ConversionService do
 
     context "when units are incompatible" do
       let(:input_value) { "73.12" }
-      let(:source_unit) { "gallon" }
+      let(:source_unit) { "gallons" }
       let(:target_unit) { "kelvin" }
       let(:student_answer) { "19.4" }
 
@@ -57,8 +57,8 @@ RSpec.describe ConversionService do
 
     context "when student answer is not numeric" do
       let(:input_value) { "6.5" }
-      let(:source_unit) { "F" }
-      let(:target_unit) { "R" }
+      let(:source_unit) { "Fahrenheit" }
+      let(:target_unit) { "Rankine" }
       let(:student_answer) { "cat" }
 
       include_examples "a conversion verdict", "incorrect"
@@ -67,7 +67,7 @@ RSpec.describe ConversionService do
     context "when units are incompatible" do
       let(:input_value) { "10" }
       let(:source_unit) { "liters" }
-      let(:target_unit) { "C" }
+      let(:target_unit) { "Celsius" }
       let(:student_answer) { "10" }
 
       include_examples "a conversion verdict", "invalid"
