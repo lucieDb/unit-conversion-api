@@ -47,4 +47,7 @@ group :development, :test do
 
   # https://github.com/simplecov-ruby/simplecov
   gem "simplecov", require: false
+
+  # https://github.com/rubocop/rubocop
+  gem "rubocop", require: false
 end

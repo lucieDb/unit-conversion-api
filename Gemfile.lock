@@ -322,6 +322,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 8.0.2)
   rspec-rails
+  rubocop
   rubocop-rails-omakase
   simplecov
   thruster
