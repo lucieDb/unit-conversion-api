@@ -60,12 +60,12 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
   end
 
   context "when one of the responses causes a crash" do
-    let(:params) { { responses: [ {} ] } }
+    let(:params) { { responses: [] } }
 
-    it "returns a 500 internal error" do
-      expect(api_response).to have_http_status(:internal_server_error)
+    it "returns a 400 bad request" do
+      expect(api_response).to have_http_status(:bad_request)
       parsed = JSON.parse(api_response.body)
-      expect(parsed["error"]).to eq("internal_error")
+      expect(parsed["error"]).to eq("invalid_params")
     end
   end
 end
