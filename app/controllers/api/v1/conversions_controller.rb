@@ -1,6 +1,7 @@
 module Api
   module V1
     class ConversionsController < ApplicationController
+      # don't want Rails to wrap params under the name of the main object : Conversion
       wrap_parameters false
       # in :
       # { "studentId" => 0,
