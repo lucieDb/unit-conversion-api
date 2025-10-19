@@ -21,47 +21,55 @@ RSpec.describe Units::Converters::TemperatureConverter do
     end
 
     it "converts Fahrenheit to Rankine" do
-      result = converter.convert(84.2, "FAHRENHEIT", "RANKINE")
-      expect(result.round(2)).to eq(543.87)
+      expect(converter.convert(84.2, "FAHRENHEIT", "RANKINE").round(2)).to eq(543.87)
     end
 
     it "converts negative Fahrenheit to Rankine" do
-      result = converter.convert(-248.9, "FAHRENHEIT", "rankine")
-      expect(result.round(2)).to eq(210.77)
+      expect(converter.convert(-248.9, "FAHRENHEIT", "rankine").round(2)).to eq(210.77)
     end
 
     it "converts Fahrenheit to Kelvin" do
-      result = converter.convert(108.94, "FAHRENHEIT", "KELVIN")
-      expect(result.round(2)).to eq(315.89)
+      expect(converter.convert(108.94, "FAHRENHEIT", "KELVIN").round(2)).to eq(315.89)
     end
 
     it "converts Fahrenheit to Celsius" do
-      result = converter.convert(39, "FAHRENHEIT", "CELSIUS")
-      expect(result.round(2)).to eq(3.89)
+      expect(converter.convert(39, "FAHRENHEIT", "CELSIUS").round(2)).to eq(3.89)
     end
 
     it "converts Kelvin to Fahrenheit" do
-      result = converter.convert(273.15, "KelviN", "FAHRENHEIT")
-      expect(result.round(2)).to eq(32.0)
+      expect(converter.convert(273.15, "KelviN", "FAHRENHEIT").round(2)).to eq(32.0)
     end
 
     it "converts Kelvin to Celsius" do
-      result = converter.convert(300.05, "KELVIN", "CELSIUS")
-      expect(result.round(2)).to eq(26.9)
+      expect(converter.convert(300.05, "KELVIN", "CELSIUS").round(2)).to eq(26.9)
     end
 
     it "converts Kelvin to Rankine" do
-      result = converter.convert(248.99, "KELVIN", "RANKINE")
-      expect(result.round(2)).to eq(448.18)
+      expect(converter.convert(248.99, "KELVIN", "RANKINE").round(2)).to eq(448.18)
+    end
+
+    it "converts Rankine to Fahrenheit" do
+      expect(converter.convert(12, "RANKINE", "FAHRENHEIT").round(2)).to eq(-447.67)
+    end
+
+    it "converts Rankine to Celsius" do
+      expect(converter.convert(300.05, "RANKINE", "CELSIUS").round(2)).to eq(-106.46)
+    end
+
+    it "converts Rankine to Kelvin" do
+      expect(converter.convert(248.99, "RANKINE", "KELVIN").round(2)).to eq(138.33)
     end
 
     it "converts negative Kelvin to Rankine" do
-      result = converter.convert(-9, "KELVIN", "rankine")
-      expect(result.round(2)).to eq(-16.2)
+      expect(converter.convert(-9, "KELVIN", "rankine").round(2)).to eq(-16.2)
     end
 
     it "raises error for unknown unit" do
       expect { converter.convert(10, "UniCorn", "Tomatoes") }.to raise_error(ArgumentError)
+    end
+
+    it "raises error for unknown unit" do
+      expect { converter.convert(10, "Kelvin", "Tomatoes") }.to raise_error(ArgumentError)
     end
   end
 end
