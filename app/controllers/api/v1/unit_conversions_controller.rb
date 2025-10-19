@@ -92,12 +92,9 @@ module Api
       end
 
       def extract_conversion_params(response)
-        permitted = response.permit(:input_value, :source_unit, :target_unit, :student_answer)
+        response.permit(:input_value, :source_unit, :target_unit, :student_answer)
                             .to_h
                             .symbolize_keys
-        permitted[:input_value] = permitted[:input_value].to_f if permitted[:input_value]
-        permitted[:student_answer] = permitted[:student_answer].to_f if permitted[:student_answer]
-        permitted
       end
     end
   end
