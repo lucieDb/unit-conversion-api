@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ConversionService do
+RSpec.describe UnitConversionService do
   describe "#call" do
     subject(:service_call) do
       described_class.new(

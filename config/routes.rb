@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      post "convert_batch", to: "conversions#batch_create"
+      post "convert_batch", to: "unit_conversions#batch_create"
     end
   end
 end

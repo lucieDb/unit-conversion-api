@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "API::V1::Conversions (Batch)", type: :request do
+RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
   let(:headers) { { "CONTENT_TYPE" => "application/json" } }
 
   subject(:api_response) do
