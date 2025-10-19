@@ -60,6 +60,10 @@ RSpec.describe Units::Converters::TemperatureConverter do
       expect(converter.convert(248.99, "RANKINE", "KELVIN").round(2)).to eq(138.33)
     end
 
+    it "converts negative Rankine to Kelvin" do
+      expect(converter.convert(-87, "RANKINE", "KELVIN").round(2)).to eq(-48.33)
+    end
+
     it "converts negative Kelvin to Rankine" do
       expect(converter.convert(-9, "KELVIN", "rankine").round(2)).to eq(-16.2)
     end
