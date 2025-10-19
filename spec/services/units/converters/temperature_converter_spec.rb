@@ -73,7 +73,7 @@ RSpec.describe Units::Converters::TemperatureConverter do
     end
 
     it "raises error for unknown unit" do
-      expect { converter.convert(10, "Kelvin", "Tomatoes") }.to raise_error(ArgumentError)
+      expect { converter.convert(10, "Kelvin", "Banana") }.to raise_error(ArgumentError)
     end
   end
 end

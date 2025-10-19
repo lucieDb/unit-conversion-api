@@ -23,8 +23,8 @@ module Units
         when "CELSIUS" then value + 273.15
         when "FAHRENHEIT" then (value - 32) * 5.0 / 9.0 + 273.15
         when "RANKINE" then value * 5.0 / 9.0
-        else raise ArgumentError, "Unknown temperature unit: #{source_unit}"
-        Rails.logger.error("Unknown temperature unit: #{source_unit}")
+        else
+          handle_unknown_unit(normalize(source_unit))
         end
       end
 
@@ -34,9 +34,14 @@ module Units
         when "CELSIUS" then value - 273.15
         when "FAHRENHEIT" then (value - 273.15) * 9.0 / 5.0 + 32
         when "RANKINE" then value * 9.0 / 5.0
-        else raise ArgumentError, "Unknown temperature unit: #{target_unit}"
-        Rails.logger.error("Unknown temperature unit: #{source_unit}")
+        else
+          handle_unknown_unit(normalize(target_unit))
         end
+      end
+
+      def handle_unknown_unit(unit)
+        Rails.logger.error("Unknown temperature unit: #{unit}")
+        raise ArgumentError, "Unknown temperature unit: #{unit}"
       end
     end
   end
