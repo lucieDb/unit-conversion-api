@@ -1,7 +1,9 @@
 module Api
   module V1
     class ConversionsController < ApplicationController
-      # in : {
+      wrap_parameters false
+      # in :
+      # { "studentId" => 0,
       #   "responses": [
       #     { "input_value": 84.2, "source_unit": "Fahrenheit", "target_unit": "Rankine", "student_answer": 543.87 },
       #     { "input_value": 317.33, "source_unit": "Kelvin", "target_unit": "Fahrenheit", "student_answer": 111.554 },
