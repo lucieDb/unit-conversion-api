@@ -59,13 +59,74 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
     end
   end
 
-  context "when one of the responses causes a crash" do
+  context "with an empty array" do
     let(:params) { { responses: [] } }
 
     it "returns a 400 bad request" do
       expect(api_response).to have_http_status(:bad_request)
       parsed = JSON.parse(api_response.body)
       expect(parsed["error"]).to eq("invalid_params")
+      expect(parsed["message"]).to eq("responses must be a non-empty array")
+    end
+  end
+
+  context "when responses param is missing or not an array" do
+    let(:params) { { responses: {} } }
+
+    it "returns 400 bad request" do
+      expect(api_response).to have_http_status(:bad_request)
+      parsed = JSON.parse(api_response.body)
+      expect(parsed["error"]).to eq("invalid_params")
+      expect(parsed["message"]).to eq("responses must be a non-empty array")
+    end
+  end
+
+  context "when responses param is nil" do
+    let(:params) { { responses: nil } }
+
+    it "returns 400 bad request" do
+      expect(api_response).to have_http_status(:bad_request)
+      parsed = JSON.parse(api_response.body)
+      expect(parsed["error"]).to eq("invalid_params")
+      expect(parsed["message"]).to eq("responses must be a non-empty array")
+    end
+  end
+
+  context "with unknown units" do
+    let(:params) do
+      {
+        responses: [
+          { input_value: 10, source_unit: "Unicorn", target_unit: "Tomatoes", student_answer: 0 }
+        ]
+      }
+    end
+
+    it "returns ArgumentError as bad request" do
+      expect(api_response).to have_http_status(:bad_request)
+      parsed = JSON.parse(api_response.body)
+      expect(parsed["error"]).to eq("argument_error")
+      expect(parsed["message"]).to include("Unknown")
+    end
+  end
+
+  context 'when batch processing raises an unexpected error' do
+    let(:params) do
+      {
+        responses: [
+          { input_value: "trigger_error", source_unit: "Kelvin", target_unit: "Celsius", student_answer: 0 }
+        ]
+      }
+    end
+
+    before do
+      allow_any_instance_of(UnitConversionService).to receive(:call).and_raise(StandardError, "Boom")
+    end
+
+    it "returns 500 internal server error" do
+      expect(api_response).to have_http_status(:internal_server_error)
+      parsed = JSON.parse(api_response.body)
+      expect(parsed["error"]).to eq("standard_error")
+      expect(parsed["message"]).to eq("Boom")
     end
   end
 end
