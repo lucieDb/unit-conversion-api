@@ -39,7 +39,12 @@ group :development, :test do
 
   gem "rspec-rails"
 
+  # https://github.com/pry/pry
   gem "pry"
 
+  # https://github.com/thoughtbot/factory_bot_rails
   gem "factory_bot_rails"
+
+  # https://github.com/simplecov-ruby/simplecov
+  gem "simplecov", require: false
 end
