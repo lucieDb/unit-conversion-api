@@ -11,7 +11,22 @@
 # a separate helper file that requires the additional dependencies and performs
 # the additional setup, and require it from the spec files that actually need
 # it.
-#
+
+# SimpleCov configuration
+# commande_line:
+# Mac/Linux: COVERAGE=true bundle exec rspec
+# Windows:
+# $env:COVERAGE = "true"
+# bundle exec rspec
+# don't forget to remove ENV
+# Remove-Item Env:\COVERAGE
+
+if ENV['COVERAGE'] == 'true'
+  require 'simplecov'
+  SimpleCov.start 'rails'
+  puts "SimpleCov started"
+end
+
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
