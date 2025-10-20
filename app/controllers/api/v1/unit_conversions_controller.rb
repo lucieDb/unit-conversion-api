@@ -8,34 +8,34 @@
 # }
 
 # out :
-# {studentId: 0,
+# { studentId: 0,
 #  results:
-#   [{input_value: "84.2",
+#   [ { input_value: "84.2",
 #     source_unit: "Fahrenheit",
 #     target_unit: "Rankine",
 #     correct_answer: 543.87,
 #     student_answer: 543.87,
-#     result: "correct"},
-#   {input_value: "317.33",
+#     result: "correct" },
+#   { input_value: "317.33",
 #     source_unit: "Kelvin",
 #     target_unit: "Fahrenheit",
 #     correct_answer: 111.52,
 #     student_answer: 76.0,
-#     result: "incorrect"},
-#   {input_value: "73",
+#     result: "incorrect" },
+#   { input_value: "73",
 #     source_unit: "Gallons",
 #     target_unit: "Celsius",
 #     student_answer: "83.56",
 #     result: "invalid",
 #     reason: :units_incompatible,
-#     message: "Source and target units are not compatible."},
-#   {input_value: "chat",
+#     message: "Source and target units are not compatible." },
+#   { input_value: "chat",
 #     source_unit: "Liters",
 #     target_unit: "Cups",
 #     student_answer: "8",
 #     result: "invalid",
 #     reason: :input_value_not_numeric,
-#     message: "Input value must be a valid number."}]}
+#     message: "Input value must be a valid number." } ] }
 
 module Api
   module V1
