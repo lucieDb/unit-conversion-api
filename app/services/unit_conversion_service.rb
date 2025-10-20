@@ -1,6 +1,6 @@
 # Service responsible for validating inputs, checking unit compatibility,
 # converting values, and determining whether a student's answer is correct, incorrect, or invalid.
-# input_value: integer or float
+# input_value: integer or float or string
 # source_unit: string
 # target_unit: string
 # student_answer: integer or float
@@ -23,17 +23,17 @@ class UnitConversionService
     correct_rounded, student_rounded = compute_rounded_values
     verdict = determine_verdict(correct_rounded, student_rounded)
 
-    build_answer(result: verdict, correct_answer: correct_rounded, student_answer: student_rounded)
+    build_response(result: verdict, correct_answer: correct_rounded, student_answer: student_rounded)
   rescue ConversionError => e
-    Rails.logger.warn("ConversionError: #{e.reason} - #{e.details}")
-    invalid(reason: e.reason, details: e.details)
+    Rails.logger.warn("ConversionError: #{e.reason}")
+    build_invalid_response(reason: e.reason)
   end
 
   private
 
   def validate_inputs
-    raise ConversionError.new(:input_value_not_numeric, { input_value: input_value }) unless numeric?(input_value)
-    raise ConversionError.new(:units_incompatible, { source_unit: source_unit, target_unit: target_unit }) unless units_compatible?
+    raise ConversionError.new(:input_value_not_numeric) unless numeric?(input_value)
+    raise ConversionError.new(:units_incompatible) unless units_compatible?
   end
 
   # accept integer and float
@@ -66,7 +66,7 @@ class UnitConversionService
     student_rounded == correct_rounded ? RESULT_CORRECT : RESULT_INCORRECT
   end
 
-  def build_answer(result:, correct_answer:, student_answer:)
+  def build_response(result:, correct_answer:, student_answer:)
     base_payload.merge(
       correct_answer: correct_answer,
       student_answer: student_answer,
@@ -76,19 +76,18 @@ class UnitConversionService
 
   def base_payload
     {
-      input_value: input_value.to_f,
+      input_value: input_value,
       source_unit: source_unit,
       target_unit: target_unit
     }
   end
 
-  def invalid(reason:, details: {})
+  def build_invalid_response(reason:)
     base_payload.merge(
       student_answer: student_answer,
       result: RESULT_INVALID,
       reason: reason,
       message: ErrorMessages::CONVERSION[reason],
-      details: details
     )
   end
 end
