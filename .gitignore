@@ -7,6 +7,9 @@
 # Ignore bundler config.
 /.bundle
 
+#Ignore the file coverage
+/coverage
+
 # Ignore all environment files.
 /.env*
 
