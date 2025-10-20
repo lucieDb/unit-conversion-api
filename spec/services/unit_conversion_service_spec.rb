@@ -46,13 +46,30 @@ RSpec.describe UnitConversionService do
       include_examples "a conversion verdict", "incorrect"
     end
 
-    context "when units are incompatible" do
+    context "when units are incompatible (temperature)" do
       let(:input_value) { "73.12" }
       let(:source_unit) { "gallons" }
       let(:target_unit) { "kelvin" }
       let(:student_answer) { "19.4" }
 
       include_examples "a conversion verdict", "invalid"
+
+      it 'return the units_incompatible reason' do
+        expect(service_call[:reason]).to eq(:units_incompatible)
+      end
+    end
+
+    context "when input_value is not a numeric" do
+      let(:input_value) { "dog" }
+      let(:source_unit) { "Kelvin" }
+      let(:target_unit) { "Celsius" }
+      let(:student_answer) { "5" }
+
+      include_examples "a conversion verdict", "invalid"
+
+      it 'return the input_value_not_numeric reason' do
+        expect(service_call[:reason]).to eq(:input_value_not_numeric)
+      end
     end
 
     context "when student answer is not numeric" do
@@ -64,13 +81,29 @@ RSpec.describe UnitConversionService do
       include_examples "a conversion verdict", "incorrect"
     end
 
-    context "when units are incompatible" do
+    context "when units are incompatible (volume)" do
       let(:input_value) { "10" }
       let(:source_unit) { "liters" }
       let(:target_unit) { "Celsius" }
       let(:student_answer) { "10" }
 
       include_examples "a conversion verdict", "invalid"
+
+      it 'return the units_incompatible reason' do
+        expect(service_call[:reason]).to eq(:units_incompatible)
+      end
+    end
+
+    context "when rounding affects correctness" do
+      let(:input_value) { 100.0 }
+      let(:source_unit) { "Celsius" }
+      let(:target_unit) { "Fahrenheit" }
+      let(:student_answer) { 211.999 }
+
+      it "considers both equal after rounding" do
+        # correct is 212.0
+        expect(service_call[:result]).to eq("correct")
+      end
     end
   end
 end
