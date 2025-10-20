@@ -13,14 +13,16 @@
 # it.
 
 # SimpleCov configuration
-# commande_line:
-# Mac/Linux: COVERAGE=true bundle exec rspec
-# Windows:
-# $env:COVERAGE = "true"
-# bundle exec rspec
-# don't forget to remove ENV
-# Remove-Item Env:\COVERAGE
+# Commande lines for Rspec with coverage :
 
+# Mac/Linux (bash/zsh):
+#   COVERAGE=true bundle exec rspec
+
+# Windows (PowerShell):
+#   $env:COVERAGE = "true"
+#   bundle exec rspec
+#   # Don't forget to remove the env. variable :
+#   Remove-Item Env:\COVERAGE
 if ENV['COVERAGE'] == 'true'
   require 'simplecov'
   SimpleCov.start 'rails'
