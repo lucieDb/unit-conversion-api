@@ -42,16 +42,16 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
       expect(second).to include("correct_answer", "student_answer", "input_value", "source_unit", "target_unit", "result")
 
       third = results[2]
-      expect(third).to include("details", "input_value", "source_unit", "target_unit", "student_answer", "result", "message", "reason")
+      expect(third).to include("input_value", "source_unit", "target_unit", "student_answer", "result", "message", "reason")
       expect(third["result"]).to eq("invalid")
       expect(third["reason"]).to eq("units_incompatible")
-      expect(third["message"]).to eq("Source and target units are not compatible")
+      expect(third["message"]).to eq("Source and target units are not compatible.")
 
       fourth = results[3]
-      expect(fourth).to include("details", "input_value", "source_unit", "target_unit", "student_answer", "result", "message", "reason")
+      expect(fourth).to include("input_value", "source_unit", "target_unit", "student_answer", "result", "message", "reason")
       expect(fourth["result"]).to eq("invalid")
       expect(fourth["reason"]).to eq("input_value_not_numeric")
-      expect(fourth["message"]).to eq("Input value must be a valid number")
+      expect(fourth["message"]).to eq("Input value must be a valid number.")
 
       fiveth = results[4]
       expect(fiveth["result"]).to eq("incorrect")
