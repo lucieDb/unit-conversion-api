@@ -1,4 +1,4 @@
-# Error messages dictionnary : centralized error messages for conversions
+# Error messages dictionary : centralized error messages for conversions
 module ErrorMessages
   CONVERSION = {
     input_value_not_numeric: "Input value must be a valid number.",
