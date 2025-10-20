@@ -65,8 +65,7 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
 
       it "returns one result and status 200" do
         expect(api_response).to have_http_status(:ok)
-        parsed = JSON.parse(api_response.body)
-        expect(parsed["results"].size).to eq(1)
+        expect(json["results"].size).to eq(1)
       end
     end
 
@@ -75,9 +74,8 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
 
       it "returns a 400 bad request" do
         expect(api_response).to have_http_status(:bad_request)
-        parsed = JSON.parse(api_response.body)
-        expect(parsed["error"]).to eq("invalid_params")
-        expect(parsed["message"]).to eq("responses must be a non-empty array")
+        expect(json["error"]).to eq("invalid_params")
+        expect(json["message"]).to eq("responses must be a non-empty array")
       end
     end
 
@@ -86,9 +84,8 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
 
       it "returns 400 bad request" do
         expect(api_response).to have_http_status(:bad_request)
-        parsed = JSON.parse(api_response.body)
-        expect(parsed["error"]).to eq("invalid_params")
-        expect(parsed["message"]).to eq("responses must be a non-empty array")
+        expect(json["error"]).to eq("invalid_params")
+        expect(json["message"]).to eq("responses must be a non-empty array")
       end
     end
 
@@ -97,9 +94,8 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
 
       it "returns 400 bad request" do
         expect(api_response).to have_http_status(:bad_request)
-        parsed = JSON.parse(api_response.body)
-        expect(parsed["error"]).to eq("invalid_params")
-        expect(parsed["message"]).to eq("responses must be a non-empty array")
+        expect(json["error"]).to eq("invalid_params")
+        expect(json["message"]).to eq("responses must be a non-empty array")
       end
     end
 
@@ -108,6 +104,8 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
 
       it "returns 400 bad request" do
         expect(api_response).to have_http_status(:bad_request)
+        expect(json["error"]).to eq("invalid_params")
+        expect(json["message"]).to eq("responses must be a non-empty array")
       end
     end
 
@@ -122,9 +120,8 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
 
       it "returns ArgumentError as bad request" do
         expect(api_response).to have_http_status(:bad_request)
-        parsed = JSON.parse(api_response.body)
-        expect(parsed["error"]).to eq("argument_error")
-        expect(parsed["message"]).to include("Unknown")
+        expect(json["error"]).to eq("argument_error")
+        expect(json["message"]).to include("Unknown")
       end
     end
 
@@ -143,16 +140,15 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
 
       it "returns 500 internal server error" do
         expect(api_response).to have_http_status(:internal_server_error)
-        parsed = JSON.parse(api_response.body)
-        expect(parsed["error"]).to eq("standard_error")
-        expect(parsed["message"]).to eq("Boom")
+        expect(json["error"]).to eq("standard_error")
+        expect(json["message"]).to eq("Boom")
       end
     end
 
     context "when a ConversionError is raised directly" do
       before do
         allow_any_instance_of(UnitConversionService).to receive(:call)
-          .and_raise(ConversionError.new(:input_value_not_numeric))
+                                                    .and_raise(ConversionError.new(:input_value_not_numeric))
       end
 
       let(:params) do
@@ -161,8 +157,7 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
 
       it "returns 422 unprocessable entity" do
         expect(api_response).to have_http_status(:unprocessable_entity)
-        parsed = JSON.parse(api_response.body)
-        expect(parsed["error"]).to eq("conversion_error")
+        expect(json["error"]).to eq("conversion_error")
       end
     end
 
@@ -173,9 +168,8 @@ RSpec.describe "API::V1::UnitConversions (Batch)", type: :request do
 
       it "returns results with studentId = nil" do
         expect(api_response).to have_http_status(:ok)
-        parsed = JSON.parse(api_response.body)
-        expect(parsed).to have_key("studentId")
-        expect(parsed["studentId"]).to be_nil
+        expect(json).to have_key("studentId")
+        expect(json["studentId"]).to be_nil
       end
     end
   end
