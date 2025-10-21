@@ -40,7 +40,8 @@ Payload example:
   "responses": [
     { "input_value": 84.2, "source_unit": "Fahrenheit", "target_unit": "Rankine", "student_answer": 543.87 },
     { "input_value": 317.33, "source_unit": "Kelvin", "target_unit": "Fahrenheit", "student_answer": 111.554 },
-    { "input_value": 73, "source_unit": "Gallons", "target_unit": "Celsius", "student_answer": 19.4 }
+    { "input_value": 73, "source_unit": "Gallons", "target_unit": "Celsius", "student_answer": 83.56 },
+    { "input_value": "chat", "source_unit": "Liters", "target_unit": "Cups", "student_answer": 8 }
   ]
 }
 ```
