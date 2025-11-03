@@ -25,8 +25,8 @@ module Units
         to_unit = normalize(target_unit)
 
         unless FACTORS_TO_LITER[from_unit] && FACTORS_TO_LITER[to_unit]
-          raise ArgumentError, "Unknown volume unit: #{source_unit} or #{target_unit}"
           Rails.logger.error("Unknown volume unit conversion: #{source_unit} -> #{target_unit}")
+          raise ArgumentError, "Unknown volume unit: #{source_unit} or #{target_unit}"
         end
 
         liters = value * FACTORS_TO_LITER[from_unit]
